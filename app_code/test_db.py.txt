@@ -1,0 +1,35 @@
+import pymysql
+
+connection = pymysql.connect(
+    host="myapp-database-one.c16008mgu2tn.us-east-2.rds.amazonaws.com",
+    user="admin",
+    password="MyAwsPass123!",   # your new password
+    database="mysql",
+    port=3306
+)
+
+cursor = connection.cursor()
+
+# create database
+cursor.execute("CREATE DATABASE IF NOT EXISTS myappdb")
+
+# use database
+cursor.execute("USE myappdb")
+
+# create table
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50)
+)
+""")
+
+# insert sample data
+cursor.execute("INSERT INTO users (name) VALUES ('Vineeth')")
+cursor.execute("INSERT INTO users (name) VALUES ('AWS Cloud')")
+
+connection.commit()
+
+print("Database and table created successfully!")
+
+connection.close()

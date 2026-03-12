@@ -1,0 +1,25 @@
+from flask import Flask
+import pymysql
+
+app = Flask(__name__)
+
+def get_connection():
+    return pymysql.connect(
+        host="myapp-database-one.c16008mgu2tn.us-east-2.rds.amazonaws.com",
+        user="admin",
+        password="MyAwsPass123!",
+        database="myappdb",
+        port=3306
+    )
+
+@app.route("/")
+def home():
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM users")
+    rows = cursor.fetchall()
+    conn.close()
+
+    return str(rows)
+
+app.run(host="0.0.0.0", port=80)
